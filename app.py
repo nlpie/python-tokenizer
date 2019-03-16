@@ -6,22 +6,6 @@ from nltk.tokenize import WhitespaceTokenizer, RegexpTokenizer, WordPunctTokeniz
 
 app = Flask(__name__)
 
-tasks = [
-    {
-        'id': 1,
-        'title': u'Buy groceries for people',
-        'description': u'Milk, Cheese, Pizza, Fruit, Tylenol',
-        'done': False
-    },
-    {
-        'id': 2,
-        'title': u'Learn Python Now!',
-        'description': u'Need to find a good Python tutorial on the web',
-        'done': False
-    }
-]
-
-
 @app.errorhandler(404)
 def not_found(error):
     return make_response(jsonify({'error': 'Not found'}), 404)
@@ -48,20 +32,28 @@ def analyze( text ):
             'begin':begin,
             'end':end
         } )
-        #print( index )
     indexList.append( annotationIndex )
-
     return indexList
 
-#https://www.geeksforgeeks.org/get-post-requests-using-python/
 
-@app.route('/process/<event_id>/<document_id>', methods=['POST'])
-def process( event_id,document_id ):
+@app.route( '/analyze', methods=['POST'] )
+def analyze_endpoint():
+    # validateOptions is n/a - no options passes - skipping implementation formal impl of noop for brevity of this example service
+    # get text from posted json
+    json = request.get_json()
+    text = json["text"]
+    print("tokenizing:",text)
+    indexList = analyze( text )
+    return jsonify( indexList[0] ), 200
+
+@app.route( '/process/<event_id>/<document_id>', methods=['POST'] )
+def process_endpoint( event_id,document_id ):
     # validateOptions is n/a - no options passes - skipping implementation formal impl of noop for brevity of this example service
     # get text from event processing service
     url = "http://host.docker.internal:8081/event/text/{}/{}".format(event_id,document_id)
     r = requests.get(url)
     text = r.text   #"The rain falls mainly on the plain, observed by a theologian"
+    print("tokenizing",text)
 
     indexList = analyze( text )
 
@@ -71,7 +63,7 @@ def process( event_id,document_id ):
         r = requests.post( url, json=index )
         print ("POST RESPONSE", r.status_code)
 
-    return jsonify( indexList[0] ), 201
+    return ('', 200)
 
 
 if __name__ == '__main__':
