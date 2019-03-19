@@ -26,9 +26,7 @@ Process text added to a `Document` associated with a previously registered `Even
 When invoking the `process` endpoint, the JSON document passed in is explicitly empty - no `PostBody` options attribute need be specified since the tokenizer's functionality is fixed and does not accept an options paramater.
 
 ### Example index created by the annotator
-```javascript
-
-
+```JSON
 {
    "tokens": {
       "@type": "annotationIndex",
