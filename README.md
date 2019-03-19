@@ -23,4 +23,48 @@ Process text added to a `Document` associated with a previously registered `Even
   
 `curl -XPOST localhost:5000/process/<event_id>/<document_id> -H "Content-Type:application/json" -d '{}'`
 
-When invoking the `process` endpoint, the JSON document passed in is explicitly empty - no `PostBody` options attribute need be specified since the tokenizer's functionality is fixed and does not accept an options paramater. 
+When invoking the `process` endpoint, the JSON document passed in is explicitly empty - no `PostBody` options attribute need be specified since the tokenizer's functionality is fixed and does not accept an options paramater.
+
+### Example index created by the annotator
+```javascript
+
+
+{
+   "tokens": {
+      "@type": "annotationIndex",
+      "name": "tokens",
+      "annotations": [
+         {
+            "@type": "genericMap",
+            "end": 8,
+            "begin": 0,
+            "token": "addendum"
+         },
+         {
+            "@type": "genericMap",
+            "end": 11,
+            "begin": 9,
+            "token": "to"
+         },
+         {
+            "@type": "genericMap",
+            "end": 15,
+            "begin": 12,
+            "token": "the"
+         },
+         {
+            "@type": "genericMap",
+            "end": 21,
+            "begin": 16,
+            "token": "above"
+         },
+         {
+            "@type": "genericMap",
+            "end": 26,
+            "begin": 22,
+            "token": "note"
+         }
+      ]
+   }
+}
+```
